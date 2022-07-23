@@ -38,33 +38,24 @@
     </style>
 </head>
 <body>
-    <button id="register-button" class="btn" onclick="register()">Register</button>
+    <app-button id="register-button" onclick="register()" text="Custom Button register"></app-button>
 
-    <app-button id="login-button" onclick="login()" text="Custom Button"></app-button>
+    <app-button id="login-button" onclick="login()" text="Custom Button login"></app-button>
     <script>
         const loginButton = document.querySelector("#login-button");
         const login = () => {
-            const originalBtnText = loginButton.textContent;
-            loginButton.textContent = "Loading..."
-            loginButton.setAttribute("disabled", "true");
-            loginButton.classList.add("fading");
+            loginButton.setAttribute("inprogress", "true");
             setTimeout(() => {
-                loginButton.textContent = originalBtnText;
-                loginButton.removeAttribute("disabled");
-                loginButton.classList.remove("fading");
+                loginButton.removeAttribute("inprogress");
             }, 2000);
         }
 
         const registerButton = document.querySelector("#register-button");
         const register = () => {
-            const originalBtnText = registerButton.textContent;
-            registerButton.textContent = "Loading..."
-            registerButton.setAttribute("disabled", "true");
-            registerButton.classList.add("fading");
+            
+            registerButton.setAttribute("inprogress", "true");
             setTimeout(() => {
-                registerButton.textContent = originalBtnText;
-                registerButton.removeAttribute("disabled");
-                registerButton.classList.remove("fading");
+                registerButton.removeAttribute("inprogress");
             }, 2000);
         }
 
@@ -76,11 +67,21 @@
             }
             // Getting the attributes of the custom element
             static get observedAttributes() {
-                return ["disabled"]
+                return ["inprogress"];
             }
             // React to the changed happening in DOM
             attributeChangedCallback(attribute, oldValue, newValue) {
-                console.log(attribute, oldValue, newValue);
+                const button = this.querySelector("button");
+                if(newValue) {
+                    button.textContent ="Loading...";
+                    button.setAttribute("disabled", "true");
+                    button.classList.add("fading");
+                }
+                else {
+                    button.textContent = this.getAttribute("text");
+                    button.removeAttribute("disabled");
+                    button.classList.remove("fading")
+                }
             }
         }
 
